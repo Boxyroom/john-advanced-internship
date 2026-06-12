@@ -8,6 +8,7 @@ import {
   FiEdit3,
   FiHelpCircle,
   FiHome,
+  FiLogIn,
   FiLogOut,
   FiSearch,
   FiSettings,
@@ -46,12 +47,17 @@ type SidebarProps = {
 export default function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout } = useAuth();
+  const { isAuthenticated, logout, openAuthModal } = useAuth();
 
   function handleLogout() {
     logout();
     onNavigate?.();
     router.push('/');
+  }
+
+  function handleLogin() {
+    openAuthModal('login');
+    onNavigate?.();
   }
 
   return (
@@ -125,9 +131,16 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
         </div>
 
         <div className={styles.navGroup}>
-          {secondaryLinks.map((link) => {
+          {[
+            ...secondaryLinks.filter((link) => link.label !== 'Logout'),
+            isAuthenticated
+              ? { label: 'Logout', icon: FiLogOut }
+              : { label: 'Login', icon: FiLogIn },
+          ].map((link) => {
             const Icon = link.icon;
-            const active = link.href ? isActive(pathname, link.href) : false;
+            const href = 'href' in link ? link.href : undefined;
+            const upgrade = 'upgrade' in link ? link.upgrade : false;
+            const active = href ? isActive(pathname, href) : false;
 
             if (link.label === 'Logout') {
               return (
@@ -145,7 +158,23 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
               );
             }
 
-            if (!link.href) {
+            if (link.label === 'Login') {
+              return (
+                <button
+                  key={link.label}
+                  className={`${styles.navLink} ${styles.navButton}`}
+                  type="button"
+                  onClick={handleLogin}
+                >
+                  <span className={styles.navIcon} aria-hidden="true">
+                    <Icon size={20} />
+                  </span>
+                  {link.label}
+                </button>
+              );
+            }
+
+            if (!href) {
               return (
                 <span
                   key={link.label}
@@ -162,10 +191,10 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
             return (
               <Link
                 key={link.label}
-                className={`${styles.navLink} ${link.upgrade ? styles.upgradeLink : ''} ${
+                className={`${styles.navLink} ${upgrade ? styles.upgradeLink : ''} ${
                   active ? styles.navLinkActive : ''
                 }`}
-                href={link.href}
+                href={href}
                 onClick={onNavigate}
               >
                 <span className={styles.navIcon} aria-hidden="true">
