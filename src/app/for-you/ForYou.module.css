@@ -17,8 +17,8 @@
 
 .sectionHeader {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 16px;
   margin-bottom: 16px;
 }
@@ -34,6 +34,7 @@
   color: #6b757b;
   font-size: 14px;
   font-weight: 300;
+  margin-top: -8px;
 }
 
 .selectedCard {
@@ -138,19 +139,23 @@
 }
 
 .bookGrid {
-  display: grid;
-  grid-template-columns: repeat(5, 172px);
-  gap: 32px 24px;
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 12px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-.suggestedGrid {
-  grid-template-columns: repeat(4, 172px);
+.bookGrid::-webkit-scrollbar {
+  display: none;
 }
 
-@media (max-width: 1180px) {
-  .bookGrid {
-    grid-template-columns: repeat(4, 172px);
-  }
+.bookGrid > * {
+  flex: 0 0 calc((100% - 96px) / 5);
+  scroll-snap-align: start;
 }
 
 @media (max-width: 980px) {
@@ -174,29 +179,14 @@
 }
 
 @media (max-width: 760px) {
-  .bookGrid,
-  .suggestedGrid {
-    display: flex;
+  .bookGrid {
     gap: 14px;
-    overflow-x: auto;
-    overflow-y: hidden;
     margin: 0 -16px;
     padding: 0 16px 12px;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
   }
 
-  .bookGrid::-webkit-scrollbar,
-  .suggestedGrid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .bookGrid > *,
-  .suggestedGrid > * {
-    width: 152px;
-    min-width: 152px;
-    scroll-snap-align: start;
+  .bookGrid > * {
+    flex-basis: 152px;
   }
 
   .selectedCard {

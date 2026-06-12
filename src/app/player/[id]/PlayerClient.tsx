@@ -1,34 +1,20 @@
 'use client';
 
 import Image from 'next/image';
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import {
   FiPause,
   FiPlay,
   FiRotateCcw,
   FiRotateCw,
 } from 'react-icons/fi';
-import { MockBook } from '@/data/books';
+import type { Book } from '@/lib/booksApi';
+import { formatPlaybackTime } from '@/lib/time';
 import styles from './Player.module.css';
 
 type PlayerClientProps = {
-  book: MockBook;
+  book: Book;
 };
-
-const playbackSpeeds = [0.75, 1, 1.25, 1.5, 2];
-
-function durationToSeconds(duration: string) {
-  const minutes = Number.parseInt(duration, 10);
-
-  return Number.isFinite(minutes) ? minutes * 60 : 0;
-}
-
-function formatTime(totalSeconds: number) {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = Math.floor(totalSeconds % 60);
-
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
 
 type PlayerProgressProps = {
   currentTime: number;
@@ -49,8 +35,8 @@ function PlayerProgress({ currentTime, duration, onSeek }: PlayerProgressProps) 
         onChange={(event) => onSeek(Number(event.target.value))}
       />
       <div className={styles.timeRow}>
-        <span>{formatTime(currentTime)}</span>
-        <span>{formatTime(duration)}</span>
+        <span>{formatPlaybackTime(currentTime)}</span>
+        <span>{formatPlaybackTime(duration)}</span>
       </div>
     </div>
   );
@@ -58,18 +44,14 @@ function PlayerProgress({ currentTime, duration, onSeek }: PlayerProgressProps) 
 
 type PlayerControlsProps = {
   isPlaying: boolean;
-  playbackSpeed: number;
   onTogglePlayback: () => void;
   onSkip: (seconds: number) => void;
-  onSpeedChange: (speed: number) => void;
 };
 
 function PlayerControls({
   isPlaying,
-  playbackSpeed,
   onTogglePlayback,
   onSkip,
-  onSpeedChange,
 }: PlayerControlsProps) {
   return (
     <div className={styles.controls}>
@@ -97,35 +79,16 @@ function PlayerControls({
       >
         <FiRotateCw size={21} />
       </button>
-      <select
-        className={styles.speedSelect}
-        value={playbackSpeed}
-        aria-label="Playback speed"
-        onChange={(event) => onSpeedChange(Number(event.target.value))}
-      >
-        {playbackSpeeds.map((speed) => (
-          <option value={speed} key={speed}>
-            {speed}x
-          </option>
-        ))}
-      </select>
     </div>
   );
 }
 
 export default function PlayerClient({ book }: PlayerClientProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const fallbackDuration = useMemo(() => durationToSeconds(book.duration), [book.duration]);
+  const fallbackDuration = useMemo(() => 0, []);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(fallbackDuration);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playbackSpeed, setPlaybackSpeed] = useState(1);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.playbackRate = playbackSpeed;
-    }
-  }, [playbackSpeed]);
 
   async function togglePlayback() {
     const audio = audioRef.current;
@@ -183,10 +146,6 @@ export default function PlayerClient({ book }: PlayerClientProps) {
     handleSeek(currentTime + seconds);
   }
 
-  function handleSpeedChange(speed: number) {
-    setPlaybackSpeed(speed);
-  }
-
   function handleSourceChange(event: ChangeEvent<HTMLAudioElement>) {
     if (event.currentTarget.error) {
       setIsPlaying(false);
@@ -194,12 +153,11 @@ export default function PlayerClient({ book }: PlayerClientProps) {
   }
 
   return (
-    <div className={styles.page}>
-      <section className={styles.player} aria-label={`${book.title} audiobook player`}>
+    <section className={styles.player} aria-label={`${book.title} audiobook player`}>
         <audio
           className={styles.audioElement}
           ref={audioRef}
-          src={book.audioUrl}
+          src={book.audioLink}
           preload="metadata"
           onLoadedMetadata={handleLoadedMetadata}
           onTimeUpdate={handleTimeUpdate}
@@ -212,7 +170,7 @@ export default function PlayerClient({ book }: PlayerClientProps) {
         <div className={styles.coverPanel}>
           <Image
             className={styles.cover}
-            src={book.coverImage}
+            src={book.imageLink}
             alt={`${book.title} cover`}
             width={341}
             height={512}
@@ -225,7 +183,6 @@ export default function PlayerClient({ book }: PlayerClientProps) {
           <p className={styles.eyebrow}>Now playing</p>
           <h1 className={styles.title}>{book.title}</h1>
           <p className={styles.author}>{book.author}</p>
-          <p className={styles.description}>{book.description}</p>
 
           <PlayerProgress
             currentTime={currentTime}
@@ -235,13 +192,10 @@ export default function PlayerClient({ book }: PlayerClientProps) {
 
           <PlayerControls
             isPlaying={isPlaying}
-            playbackSpeed={playbackSpeed}
             onTogglePlayback={togglePlayback}
             onSkip={skip}
-            onSpeedChange={handleSpeedChange}
           />
         </div>
-      </section>
-    </div>
+    </section>
   );
 }

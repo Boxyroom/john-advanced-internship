@@ -2,6 +2,10 @@
   color: #032b41;
 }
 
+.errorState {
+  max-width: 620px;
+}
+
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
