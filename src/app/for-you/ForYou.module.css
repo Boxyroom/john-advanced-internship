@@ -1,0 +1,283 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.pageTitle {
+  color: #032b41;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.section {
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  color: #032b41;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.sectionSubtitle {
+  color: #6b757b;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.selectedCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 116px;
+  align-items: center;
+  gap: 24px;
+  min-height: 208px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #fbefd6;
+  padding: 24px 28px;
+}
+
+.selectedCopy {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.9fr) 1px minmax(0, 1.25fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.selectedIntro {
+  color: #032b41;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.selectedDivider {
+  width: 1px;
+  min-height: 132px;
+  background: rgba(3, 43, 65, 0.18);
+}
+
+.selectedMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.selectedTitleRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.selectedTitle {
+  color: #032b41;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.selectedAuthor {
+  color: #6b757b;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.selectedDescription {
+  max-width: 420px;
+  color: #394547;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.45;
+}
+
+.selectedImage {
+  width: 116px;
+  height: 172px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.selectedStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: #394547;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.selectedStat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.premiumPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #032b41;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bookGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 172px);
+  gap: 32px 24px;
+}
+
+.suggestedGrid {
+  grid-template-columns: repeat(4, 172px);
+}
+
+@media (max-width: 1180px) {
+  .bookGrid {
+    grid-template-columns: repeat(4, 172px);
+  }
+}
+
+@media (max-width: 980px) {
+  .selectedCard {
+    grid-template-columns: minmax(0, 1fr) 104px;
+  }
+
+  .selectedCopy {
+    grid-template-columns: minmax(190px, 0.9fr) 1px minmax(0, 1.2fr);
+    gap: 22px;
+  }
+
+  .selectedImage {
+    width: 104px;
+    height: 154px;
+  }
+
+  .selectedIntro {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 760px) {
+  .bookGrid,
+  .suggestedGrid {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0 -16px;
+    padding: 0 16px 12px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bookGrid::-webkit-scrollbar,
+  .suggestedGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bookGrid > *,
+  .suggestedGrid > * {
+    width: 152px;
+    min-width: 152px;
+    scroll-snap-align: start;
+  }
+
+  .selectedCard {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    min-height: 168px;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .selectedCopy {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .selectedDivider {
+    display: none;
+  }
+
+  .selectedImage {
+    width: 96px;
+    height: 142px;
+  }
+
+  .selectedIntro {
+    font-size: 20px;
+  }
+
+  .selectedDescription {
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+  }
+}
+
+@media (max-width: 430px) {
+  .page {
+    gap: 26px;
+  }
+
+  .pageTitle {
+    font-size: 28px;
+  }
+
+  .bookGrid,
+  .suggestedGrid {
+    gap: 14px;
+  }
+
+  .sectionHeader {
+    display: block;
+  }
+
+  .sectionSubtitle {
+    margin-top: 6px;
+  }
+
+  .selectedCard {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    gap: 14px;
+    min-height: 168px;
+    padding: 16px;
+  }
+
+  .selectedIntro {
+    font-size: 18px;
+    line-height: 1.25;
+  }
+
+  .selectedTitle {
+    font-size: 16px;
+  }
+
+  .selectedDescription,
+  .selectedAuthor,
+  .selectedStats {
+    font-size: 13px;
+  }
+
+  .selectedImage {
+    width: 96px;
+    height: 142px;
+  }
+}
