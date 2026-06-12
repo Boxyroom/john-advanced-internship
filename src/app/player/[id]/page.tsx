@@ -1,11 +1,20 @@
-import AppPagePlaceholder from '@/components/AppPagePlaceholder';
+import AppLayout from '@/components/AppLayout';
+import { getBookById } from '@/data/books';
+import PlayerClient from './PlayerClient';
 
-export default function PlayerPage() {
+type PlayerPageProps = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export default async function PlayerPage({ params }: PlayerPageProps) {
+  const { id } = await params;
+  const book = getBookById(id);
+
   return (
-    <AppPagePlaceholder
-      eyebrow="Player"
-      title="Audio player"
-      description="This route reserves the shared shell for the future listening experience."
-    />
+    <AppLayout>
+      <PlayerClient book={book} />
+    </AppLayout>
   );
 }

@@ -64,9 +64,15 @@
   color: #394547;
   font-size: 15px;
   font-weight: 400;
+  font-family: inherit;
+  text-align: left;
   transition:
     background-color 150ms ease,
     color 150ms ease;
+}
+
+.navButton {
+  width: 100%;
 }
 
 .navLink:hover,

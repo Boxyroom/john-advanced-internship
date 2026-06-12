@@ -7,10 +7,17 @@ export type MockBook = {
   rating: string;
   isPremium?: boolean;
   coverImage: string;
+  audioUrl?: string;
   tags: string[];
   description: string;
   authorBio: string;
 };
+
+const placeholderAudioUrls = [
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+];
 
 export const recommendedBooks: MockBook[] = [
   {
@@ -22,6 +29,7 @@ export const recommendedBooks: MockBook[] = [
     rating: '4.8',
     isPremium: true,
     coverImage: '/assets/book-atomic-habits.png',
+    audioUrl: placeholderAudioUrls[0],
     tags: ['Self-growth', 'Productivity', 'Habits'],
     description:
       'Atomic Habits explains how small improvements compound into meaningful life changes. It focuses on practical systems for building better routines, breaking bad patterns, and making progress feel easier to repeat.',
@@ -36,6 +44,7 @@ export const recommendedBooks: MockBook[] = [
     duration: '16 min',
     rating: '4.7',
     coverImage: '/assets/book-deep-work.png',
+    audioUrl: placeholderAudioUrls[1],
     tags: ['Focus', 'Work', 'Productivity'],
     description:
       'Deep Work argues that sustained concentration is one of the most valuable skills in modern work. The book outlines rituals and boundaries that help protect attention and produce higher-quality results.',
@@ -51,6 +60,7 @@ export const recommendedBooks: MockBook[] = [
     rating: '4.9',
     isPremium: true,
     coverImage: '/assets/book-psychology-money.png',
+    audioUrl: placeholderAudioUrls[2],
     tags: ['Money', 'Mindset', 'Finance'],
     description:
       'The Psychology of Money explores why financial success depends as much on behavior as knowledge. It highlights patience, humility, risk, and personal values as core parts of building wealth.',
@@ -65,6 +75,7 @@ export const recommendedBooks: MockBook[] = [
     duration: '19 min',
     rating: '4.6',
     coverImage: '/assets/book-cant-hurt-me.png',
+    audioUrl: placeholderAudioUrls[0],
     tags: ['Mindset', 'Discipline', 'Motivation'],
     description:
       "Can't Hurt Me follows David Goggins' transformation through discipline, endurance, and mental toughness. Its lessons center on accountability, resilience, and pushing beyond self-imposed limits.",
@@ -79,6 +90,7 @@ export const recommendedBooks: MockBook[] = [
     duration: '15 min',
     rating: '4.5',
     coverImage: '/assets/book-start-with-why.png',
+    audioUrl: placeholderAudioUrls[1],
     tags: ['Leadership', 'Business', 'Purpose'],
     description:
       'Start With Why explains how clear purpose helps leaders and organizations earn trust. It frames inspiration as the result of communicating beliefs before products, tactics, or features.',
@@ -96,6 +108,7 @@ export const suggestedBooks: MockBook[] = [
     duration: '14 min',
     rating: '4.7',
     coverImage: '/assets/book-essentialism.png',
+    audioUrl: placeholderAudioUrls[2],
     tags: ['Focus', 'Priorities', 'Productivity'],
     description:
       'Essentialism makes the case for choosing fewer things with greater intention. It helps readers identify what matters, remove distractions, and invest energy where it has the most impact.',
@@ -111,6 +124,7 @@ export const suggestedBooks: MockBook[] = [
     rating: '4.6',
     isPremium: true,
     coverImage: '/assets/book-mindset.png',
+    audioUrl: placeholderAudioUrls[0],
     tags: ['Psychology', 'Learning', 'Growth'],
     description:
       'Mindset explains how beliefs about ability shape learning, effort, and achievement. It contrasts fixed and growth mindsets and shows how changing assumptions can unlock improvement.',
@@ -125,6 +139,7 @@ export const suggestedBooks: MockBook[] = [
     duration: '17 min',
     rating: '4.8',
     coverImage: '/assets/book-zero-to-one.png',
+    audioUrl: placeholderAudioUrls[1],
     tags: ['Startups', 'Business', 'Innovation'],
     description:
       'Zero to One explores how founders create new value instead of competing over what already exists. It emphasizes original thinking, durable advantages, and building for the future.',
@@ -139,6 +154,7 @@ export const suggestedBooks: MockBook[] = [
     duration: '12 min',
     rating: '4.4',
     coverImage: '/assets/book-grit.png',
+    audioUrl: placeholderAudioUrls[2],
     tags: ['Psychology', 'Success', 'Resilience'],
     description:
       'Grit examines why sustained effort and long-term passion often matter more than talent alone. It shows how perseverance can be developed through purpose, practice, and commitment.',

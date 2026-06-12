@@ -31,6 +31,8 @@
 .navList {
   cursor: not-allowed;
   color: #032b41;
+  font-family: inherit;
+  font-size: 16px;
   transition: color 100ms;
 }
 
@@ -133,10 +135,15 @@
   font-weight: 500;
   color: #6b757b;
   margin-bottom: 16px;
+  transition: color 200ms ease;
 }
 
 .statisticsHeading:last-child {
   margin-bottom: 0;
+}
+
+.statisticsHeadingActive {
+  color: #2bd97c;
 }
 
 .statisticsWrapper {

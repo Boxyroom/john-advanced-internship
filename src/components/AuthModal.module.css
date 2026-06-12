@@ -1,0 +1,142 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(3, 43, 65, 0.48);
+  padding: 24px;
+}
+
+.modal {
+  width: min(100%, 420px);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #032b41;
+  box-shadow: 0 24px 64px rgba(3, 43, 65, 0.24);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e1e7ea;
+  padding: 20px 24px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #394547;
+}
+
+.closeButton:hover {
+  background: #f1f6f4;
+}
+
+.body {
+  padding: 24px;
+}
+
+.modeToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.modeButton {
+  height: 40px;
+  border-radius: 4px;
+  background: #f1f6f4;
+  color: #394547;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.modeButtonActive {
+  background: #032b41;
+  color: #ffffff;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  color: #394547;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input {
+  height: 44px;
+  border: 1px solid #d6dde1;
+  border-radius: 4px;
+  color: #032b41;
+  font-size: 16px;
+  outline: none;
+  padding: 0 12px;
+}
+
+.input:focus {
+  border-color: #2bd97c;
+  box-shadow: 0 0 0 3px rgba(43, 217, 124, 0.16);
+}
+
+.error {
+  border-radius: 4px;
+  background: #ffe9e9;
+  color: #b42318;
+  font-size: 14px;
+  line-height: 1.35;
+  padding: 10px 12px;
+}
+
+.submitButton,
+.guestButton {
+  height: 44px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.submitButton {
+  background: #2bd97c;
+  color: #032b41;
+}
+
+.submitButton:hover {
+  background: #20ba68;
+}
+
+.guestButton {
+  border: 1px solid #d6dde1;
+  background: #ffffff;
+  color: #032b41;
+}
+
+.helperText {
+  color: #6b757b;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+}

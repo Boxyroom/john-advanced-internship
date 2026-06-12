@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   FiBookmark,
   FiEdit3,
@@ -13,6 +13,7 @@ import {
   FiSettings,
 } from 'react-icons/fi';
 import { FaCrown } from 'react-icons/fa';
+import { useAuth } from './AuthContext';
 import styles from './AppLayout.module.css';
 
 const primaryLinks = [
@@ -44,6 +45,14 @@ type SidebarProps = {
 
 export default function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    onNavigate?.();
+    router.push('/');
+  }
 
   return (
     <aside className={styles.sidebar}>
@@ -68,6 +77,22 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
           {primaryLinks.map((link) => {
             const Icon = link.icon;
             const active = link.href ? isActive(pathname, link.href) : false;
+
+            if (link.label === 'Logout') {
+              return (
+                <button
+                  key={link.label}
+                  className={`${styles.navLink} ${styles.navButton}`}
+                  type="button"
+                  onClick={handleLogout}
+                >
+                  <span className={styles.navIcon} aria-hidden="true">
+                    <Icon size={20} />
+                  </span>
+                  {link.label}
+                </button>
+              );
+            }
 
             if (!link.href) {
               return (
@@ -103,6 +128,22 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
           {secondaryLinks.map((link) => {
             const Icon = link.icon;
             const active = link.href ? isActive(pathname, link.href) : false;
+
+            if (link.label === 'Logout') {
+              return (
+                <button
+                  key={link.label}
+                  className={`${styles.navLink} ${styles.navButton}`}
+                  type="button"
+                  onClick={handleLogout}
+                >
+                  <span className={styles.navIcon} aria-hidden="true">
+                    <Icon size={20} />
+                  </span>
+                  {link.label}
+                </button>
+              );
+            }
 
             if (!link.href) {
               return (

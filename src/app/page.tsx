@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   AiFillFileText,
@@ -9,9 +10,50 @@ import {
 import { BsStarFill, BsStarHalf } from 'react-icons/bs';
 import { BiCrown } from 'react-icons/bi';
 import { RiLeafLine } from 'react-icons/ri';
+import { useAuth } from '@/components/AuthContext';
 import styles from './page.module.css';
 
+const firstStatisticsHeadings = [
+  'Enhance your knowledge',
+  'Achieve greater success',
+  'Improve your health',
+  'Develop better parenting skills',
+  'Increase happiness',
+  'Be the best version of yourself!',
+];
+
+const secondStatisticsHeadings = [
+  'Expand your learning',
+  'Accomplish your goals',
+  'Strengthen your vitality',
+  'Become a better caregiver',
+  'Improve your mood',
+  'Maximize your abilities',
+];
+
 export default function Home() {
+  const [activeHeadingIndex, setActiveHeadingIndex] = useState(0);
+  const { isAuthenticated, openAuthModal, logout } = useAuth();
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setActiveHeadingIndex(
+        (currentIndex) => (currentIndex + 1) % firstStatisticsHeadings.length,
+      );
+    }, 2000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  const handleAuthButtonClick = () => {
+    if (isAuthenticated) {
+      logout();
+      return;
+    }
+
+    openAuthModal('login');
+  };
+
   return (
     <>
       {/* Navigation */}
@@ -29,8 +71,14 @@ export default function Home() {
             />
           </figure>
           <ul className={styles.navListWrapper}>
-            <li className={`${styles.navList} ${styles.navListLogin}`}>
-              Login
+            <li>
+              <button
+                className={`${styles.navList} ${styles.navListLogin}`}
+                type="button"
+                onClick={handleAuthButtonClick}
+              >
+                {isAuthenticated ? 'Logout' : 'Login'}
+              </button>
             </li>
             <li className={`${styles.navList} ${styles.navListMobile}`}>About</li>
             <li className={`${styles.navList} ${styles.navListMobile}`}>Contact</li>
@@ -56,8 +104,12 @@ export default function Home() {
                   <br className={styles.removeTablet} />
                   and even people who don&apos;t like to read.
                 </div>
-                <button className={`${styles.btn} ${styles.homeCtaBtn}`}>
-                  Login
+                <button
+                  className={`${styles.btn} ${styles.homeCtaBtn}`}
+                  type="button"
+                  onClick={handleAuthButtonClick}
+                >
+                  {isAuthenticated ? 'Logout' : 'Login'}
                 </button>
               </div>
               <figure className={styles.landingImageMask}>
@@ -115,24 +167,16 @@ export default function Home() {
             {/* Statistics Wrapper 1 */}
             <div className={styles.statisticsWrapper}>
               <div className={styles.statisticsContentHeader}>
-                <div className={styles.statisticsHeading}>
-                  Enhance your knowledge
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Achieve greater success
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Improve your health
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Develop better parenting skills
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Increase happiness
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Be the best version of yourself!
-                </div>
+                {firstStatisticsHeadings.map((heading, index) => (
+                  <div
+                    className={`${styles.statisticsHeading} ${
+                      activeHeadingIndex === index ? styles.statisticsHeadingActive : ''
+                    }`}
+                    key={heading}
+                  >
+                    {heading}
+                  </div>
+                ))}
               </div>
               <div className={styles.statisticsContentDetails}>
                 <div className={styles.statisticsData}>
@@ -187,24 +231,16 @@ export default function Home() {
               <div
                 className={`${styles.statisticsContentHeader} ${styles.statisticsContentHeaderSecond}`}
               >
-                <div className={styles.statisticsHeading}>
-                  Expand your learning
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Accomplish your goals
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Strengthen your vitality
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Become a better caregiver
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Improve your mood
-                </div>
-                <div className={styles.statisticsHeading}>
-                  Maximize your abilities
-                </div>
+                {secondStatisticsHeadings.map((heading, index) => (
+                  <div
+                    className={`${styles.statisticsHeading} ${
+                      activeHeadingIndex === index ? styles.statisticsHeadingActive : ''
+                    }`}
+                    key={heading}
+                  >
+                    {heading}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -274,8 +310,12 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.reviewsBtnWrapper}>
-              <button className={`${styles.btn} ${styles.homeCtaBtn}`}>
-                Login
+              <button
+                className={`${styles.btn} ${styles.homeCtaBtn}`}
+                type="button"
+                onClick={handleAuthButtonClick}
+              >
+                {isAuthenticated ? 'Logout' : 'Login'}
               </button>
             </div>
           </div>
