@@ -1,0 +1,314 @@
+.page {
+  color: #032b41;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "content";
+  align-items: start;
+  max-width: 640px;
+}
+
+.heroWithCover {
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 28vw, 340px);
+  grid-template-areas: "content cover";
+  gap: 36px;
+  max-width: 1040px;
+}
+
+.coverPanel {
+  grid-area: cover;
+  position: sticky;
+  top: 104px;
+}
+
+.cover {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.content {
+  grid-area: content;
+  min-width: 0;
+  max-width: 640px;
+  padding-top: 2px;
+}
+
+.title {
+  color: #032b41;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.author {
+  color: #032b41;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.subtitle {
+  color: #394547;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.35;
+  margin-bottom: 18px;
+}
+
+.metadata {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid #e1e7ea;
+  border-bottom: 1px solid #e1e7ea;
+  column-gap: 18px;
+  margin-bottom: 18px;
+}
+
+.metadataItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  color: #394547;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.metadataItem:nth-child(odd) {
+  border-right: 1px solid #e1e7ea;
+  padding-right: 18px;
+}
+
+.metadataItem:nth-child(even) {
+  padding-left: 2px;
+}
+
+.star {
+  color: #f5a623;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  border-radius: 999px;
+  background: #f1f6f4;
+  color: #032b41;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 12px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 390px;
+  margin-bottom: 22px;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 144px;
+  height: 46px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.primaryAction {
+  background: #032b41;
+  color: #ffffff;
+}
+
+.secondaryAction {
+  border: 1px solid #d6dde1;
+  background: #ffffff;
+  color: #032b41;
+  grid-column: 1 / -1;
+}
+
+.summary {
+  max-width: 720px;
+  border-top: 1px solid #e1e7ea;
+  padding-top: 20px;
+}
+
+.summaryBlock {
+  margin-bottom: 22px;
+}
+
+.summaryBlock:last-child {
+  margin-bottom: 0;
+}
+
+.summaryTitle {
+  color: #032b41;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.summaryText {
+  color: #394547;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.48;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    max-width: 620px;
+  }
+
+  .heroWithCover {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "cover"
+      "content";
+    gap: 22px;
+    max-width: 620px;
+  }
+
+  .coverPanel {
+    position: static;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cover {
+    width: 286px;
+    max-width: 286px;
+  }
+
+  .content {
+    max-width: none;
+    padding-top: 0;
+  }
+
+  .title {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    margin-bottom: 16px;
+  }
+
+  .actions {
+    max-width: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 560px;
+  }
+
+  .heroWithCover {
+    gap: 20px;
+    max-width: 560px;
+  }
+
+  .cover {
+    width: min(100%, 280px);
+    max-width: 280px;
+    aspect-ratio: 1;
+  }
+
+  .title {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+
+  .author,
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .metadata {
+    margin-bottom: 16px;
+  }
+
+  .metadataItem {
+    min-height: 44px;
+    font-size: 13px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 430px) {
+  .hero {
+    gap: 18px;
+  }
+
+  .cover {
+    width: 228px;
+    max-width: 228px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .author {
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    margin-bottom: 14px;
+  }
+
+  .tags {
+    margin-bottom: 18px;
+  }
+
+  .tag {
+    min-height: 30px;
+    font-size: 12px;
+  }
+
+  .actions {
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    height: 44px;
+    font-size: 15px;
+    min-width: 0;
+  }
+
+  .summary {
+    padding-top: 22px;
+  }
+
+  .summaryTitle {
+    font-size: 18px;
+  }
+
+  .summaryText {
+    font-size: 15px;
+  }
+}

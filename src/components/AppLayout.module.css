@@ -276,6 +276,7 @@
 
   .menuButton {
     display: flex;
+    order: 2;
   }
 
   .topbar {
@@ -285,6 +286,7 @@
   }
 
   .searchForm {
+    order: 1;
     flex: 1;
     width: auto;
     min-width: 0;
@@ -313,13 +315,8 @@
   }
 
   .menuButton {
-    order: 2;
     width: 42px;
     height: 42px;
-  }
-
-  .searchForm {
-    order: 1;
   }
 
   .searchInput {
