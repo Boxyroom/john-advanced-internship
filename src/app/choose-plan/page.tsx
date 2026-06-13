@@ -85,12 +85,17 @@ const faqs = [
 
 export default function ChoosePlanPage() {
   const router = useRouter();
-  const { isAuthenticated, openAuthModal, user } = useAuth();
+  const { isAuthenticated, isGuest, openAuthModal, user } = useAuth();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('yearly');
 
   function handleUpgrade(plan: SubscriptionPlan) {
     if (!isAuthenticated) {
       openAuthModal('login');
+      return;
+    }
+
+    if (isGuest) {
+      openAuthModal('register');
       return;
     }
 

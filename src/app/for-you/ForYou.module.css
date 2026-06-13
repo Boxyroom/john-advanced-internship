@@ -42,11 +42,30 @@
   grid-template-columns: minmax(0, 1fr) 116px;
   align-items: center;
   gap: 24px;
+  width: 100%;
   min-height: 208px;
   overflow: hidden;
+  border: 0;
   border-radius: 8px;
   background: #fbefd6;
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
   padding: 24px 28px;
+  text-align: left;
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.selectedCard:hover {
+  box-shadow: 0 12px 28px rgba(3, 43, 65, 0.08);
+  transform: translateY(-1px);
+}
+
+.selectedCard:focus-visible {
+  outline: 3px solid rgba(43, 217, 124, 0.42);
+  outline-offset: 3px;
 }
 
 .selectedCopy {
@@ -82,6 +101,18 @@
   gap: 10px;
 }
 
+.playButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #032b41;
+  color: #ffffff;
+}
+
 .selectedTitle {
   color: #032b41;
   font-size: 18px;
@@ -92,6 +123,13 @@
 .selectedAuthor {
   color: #6b757b;
   font-size: 14px;
+  line-height: 1.2;
+}
+
+.selectedDuration {
+  color: #394547;
+  font-size: 14px;
+  font-weight: 600;
   line-height: 1.2;
 }
 

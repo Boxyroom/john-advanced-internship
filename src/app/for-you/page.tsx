@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import AppLayout from '@/components/AppLayout';
 import BookCard from '@/components/BookCard';
 import {
@@ -6,6 +5,7 @@ import {
   getSelectedBook,
   getSuggestedBooks,
 } from '@/lib/booksApi';
+import SelectedBookCard from './SelectedBookCard';
 import styles from './ForYou.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -25,27 +25,7 @@ export default async function ForYouPage() {
             <h2 className={styles.sectionTitle}>Selected just for you</h2>
           </div>
 
-          <div className={styles.selectedCard}>
-            <div className={styles.selectedCopy}>
-              <p className={styles.selectedIntro}>{selectedBook.subTitle}</p>
-              <div className={styles.selectedDivider} />
-              <div className={styles.selectedMeta}>
-                <div className={styles.selectedTitleRow}>
-                  <h3 className={styles.selectedTitle}>{selectedBook.title}</h3>
-                </div>
-                <p className={styles.selectedAuthor}>{selectedBook.author}</p>
-              </div>
-            </div>
-            <Image
-              className={styles.selectedImage}
-              src={selectedBook.imageLink}
-              alt={`${selectedBook.title} cover`}
-              width={341}
-              height={512}
-              sizes="(max-width: 576px) 104px, 140px"
-              priority
-            />
-          </div>
+          <SelectedBookCard book={selectedBook} />
         </section>
 
         <section className={styles.section}>

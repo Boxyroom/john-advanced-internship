@@ -150,6 +150,10 @@
   grid-column: 1 / -1;
 }
 
+.savedIcon {
+  color: #032b41;
+}
+
 .summary {
   max-width: 720px;
   border-top: 1px solid #e1e7ea;

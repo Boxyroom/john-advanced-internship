@@ -1,5 +1,6 @@
 import AppLayout from '@/components/AppLayout';
 import { getBook } from '@/lib/booksApi';
+import PlayerAccessGate from './PlayerAccessGate';
 import PlayerClient from './PlayerClient';
 import styles from './Player.module.css';
 
@@ -31,13 +32,15 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
 
   return (
     <AppLayout>
-      <div className={styles.page}>
-        <section className={styles.summarySection}>
-          <h1 className={styles.summaryTitle}>{book.title}</h1>
-          <p className={styles.summaryText}>{book.summary}</p>
-        </section>
-        <PlayerClient book={book} />
-      </div>
+      <PlayerAccessGate subscriptionRequired={book.subscriptionRequired}>
+        <div className={styles.page}>
+          <section className={styles.summarySection}>
+            <h1 className={styles.summaryTitle}>{book.title}</h1>
+            <p className={styles.summaryText}>{book.summary}</p>
+          </section>
+          <PlayerClient book={book} />
+        </div>
+      </PlayerAccessGate>
     </AppLayout>
   );
 }

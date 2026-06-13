@@ -8,7 +8,9 @@ import {
   FiRotateCcw,
   FiRotateCw,
 } from 'react-icons/fi';
+import { useAuth } from '@/components/AuthContext';
 import type { Book } from '@/lib/booksApi';
+import { markBookFinished } from '@/lib/library';
 import { formatPlaybackTime } from '@/lib/time';
 import styles from './Player.module.css';
 
@@ -84,11 +86,22 @@ function PlayerControls({
 }
 
 export default function PlayerClient({ book }: PlayerClientProps) {
+  const { user } = useAuth();
   const audioRef = useRef<HTMLAudioElement>(null);
   const fallbackDuration = useMemo(() => 0, []);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(fallbackDuration);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  function syncDuration() {
+    const audio = audioRef.current;
+
+    if (!audio || !Number.isFinite(audio.duration)) {
+      return;
+    }
+
+    setDuration(audio.duration);
+  }
 
   async function togglePlayback() {
     const audio = audioRef.current;
@@ -112,14 +125,7 @@ export default function PlayerClient({ book }: PlayerClientProps) {
   }
 
   function handleLoadedMetadata() {
-    const audio = audioRef.current;
-
-    if (!audio || !Number.isFinite(audio.duration)) {
-      setDuration(fallbackDuration);
-      return;
-    }
-
-    setDuration(audio.duration);
+    syncDuration();
   }
 
   function handleTimeUpdate() {
@@ -127,6 +133,7 @@ export default function PlayerClient({ book }: PlayerClientProps) {
 
     if (audio) {
       setCurrentTime(audio.currentTime);
+      syncDuration();
     }
   }
 
@@ -137,9 +144,15 @@ export default function PlayerClient({ book }: PlayerClientProps) {
       return;
     }
 
-    const nextTime = Math.min(Math.max(time, 0), duration);
+    const audioDuration = Number.isFinite(audio.duration) ? audio.duration : duration;
+    const maxTime = audioDuration || duration || 0;
+    const nextTime = maxTime > 0
+      ? Math.min(Math.max(time, 0), maxTime)
+      : Math.max(time, 0);
+
     audio.currentTime = nextTime;
     setCurrentTime(nextTime);
+    syncDuration();
   }
 
   function skip(seconds: number) {
@@ -152,6 +165,11 @@ export default function PlayerClient({ book }: PlayerClientProps) {
     }
   }
 
+  function handleEnded() {
+    setIsPlaying(false);
+    markBookFinished(user?.email, book.id);
+  }
+
   return (
     <section className={styles.player} aria-label={`${book.title} audiobook player`}>
         <audio
@@ -160,8 +178,10 @@ export default function PlayerClient({ book }: PlayerClientProps) {
           src={book.audioLink}
           preload="metadata"
           onLoadedMetadata={handleLoadedMetadata}
+          onDurationChange={syncDuration}
+          onCanPlay={syncDuration}
           onTimeUpdate={handleTimeUpdate}
-          onEnded={() => setIsPlaying(false)}
+          onEnded={handleEnded}
           onPause={() => setIsPlaying(false)}
           onPlay={() => setIsPlaying(true)}
           onError={handleSourceChange}

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   FiBookmark,
   FiEdit3,
@@ -14,6 +15,12 @@ import {
   FiSettings,
 } from 'react-icons/fi';
 import { FaCrown } from 'react-icons/fa';
+import {
+  getSubscription,
+  getSubscriptionLabel,
+  SUBSCRIPTION_CHANGE_EVENT,
+  type SubscriptionPlan,
+} from '@/lib/subscription';
 import { useAuth } from './AuthContext';
 import styles from './AppLayout.module.css';
 
@@ -47,7 +54,23 @@ type SidebarProps = {
 export default function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated, logout, openAuthModal } = useAuth();
+  const { isAuthenticated, logout, openAuthModal, user } = useAuth();
+  const [subscription, setSubscription] = useState<SubscriptionPlan | null>(null);
+
+  useEffect(() => {
+    function syncSubscription() {
+      setSubscription(getSubscription(user?.email, isAuthenticated));
+    }
+
+    syncSubscription();
+    window.addEventListener(SUBSCRIPTION_CHANGE_EVENT, syncSubscription);
+    window.addEventListener('storage', syncSubscription);
+
+    return () => {
+      window.removeEventListener(SUBSCRIPTION_CHANGE_EVENT, syncSubscription);
+      window.removeEventListener('storage', syncSubscription);
+    };
+  }, [isAuthenticated, user?.email]);
 
   function handleLogout() {
     logout();
@@ -132,7 +155,20 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
 
         <div className={styles.navGroup}>
           {[
-            ...secondaryLinks.filter((link) => link.label !== 'Logout'),
+            ...secondaryLinks
+              .filter((link) => link.label !== 'Logout')
+              .map((link) => {
+                if (!('upgrade' in link)) {
+                  return link;
+                }
+
+                return {
+                  ...link,
+                  label: subscription && subscription !== 'basic'
+                    ? getSubscriptionLabel(subscription)
+                    : link.label,
+                };
+              }),
             isAuthenticated
               ? { label: 'Logout', icon: FiLogOut }
               : { label: 'Login', icon: FiLogIn },

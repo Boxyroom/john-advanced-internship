@@ -92,6 +92,7 @@ export default async function BookPage({ params }: BookPageProps) {
                 author: book.author,
                 subTitle: book.subTitle,
                 imageLink: book.imageLink,
+                subscriptionRequired: book.subscriptionRequired,
               }}
             />
 

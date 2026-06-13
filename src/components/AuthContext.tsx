@@ -8,6 +8,8 @@ import {
   useSyncExternalStore,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import { clearLibraryForUser } from '@/lib/library';
+import { clearSubscription } from '@/lib/subscription';
 import AuthModal from './AuthModal';
 
 type AuthMode = 'login' | 'register';
@@ -24,6 +26,7 @@ type StoredUser = {
 type AuthContextValue = {
   user: AuthUser | null;
   isAuthenticated: boolean;
+  isGuest: boolean;
   openAuthModal: (mode?: AuthMode) => void;
   closeAuthModal: () => void;
   login: (email: string, password: string) => string | null;
@@ -36,8 +39,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 const AUTH_USER_KEY = 'summarist-auth-user';
 const REGISTERED_USER_KEY = 'summarist-registered-user';
 const AUTH_CHANGE_EVENT = 'summarist-auth-change';
+export const GUEST_EMAIL = 'guest@gmail.com';
 const guestUser: StoredUser = {
-  email: 'guest@gmail.com',
+  email: GUEST_EMAIL,
   password: 'guest123',
 };
 
@@ -97,6 +101,36 @@ function parseAuthUser(snapshot: string | null) {
   }
 }
 
+function clearGuestProgressData() {
+  const progressKeys = Object.keys(window.localStorage).filter(
+    (key) => key.startsWith('summarist-') && key.includes('progress'),
+  );
+
+  progressKeys.forEach((key) => {
+    if (key.includes(GUEST_EMAIL)) {
+      window.localStorage.removeItem(key);
+      return;
+    }
+
+    const storedProgress = window.localStorage.getItem(key);
+
+    if (!storedProgress) {
+      return;
+    }
+
+    try {
+      const parsedProgress = JSON.parse(storedProgress) as Record<string, unknown>;
+
+      if (Object.prototype.hasOwnProperty.call(parsedProgress, GUEST_EMAIL)) {
+        delete parsedProgress[GUEST_EMAIL];
+        window.localStorage.setItem(key, JSON.stringify(parsedProgress));
+      }
+    } catch {
+      // Ignore non-JSON progress keys; none are currently used by the app.
+    }
+  });
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const authSnapshot = useSyncExternalStore(
@@ -105,8 +139,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     getServerAuthSnapshot,
   );
   const user = parseAuthUser(authSnapshot);
+  const isGuest = user?.email === GUEST_EMAIL;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>('login');
+  const [authModalKey, setAuthModalKey] = useState(0);
 
   function persistAuthUser(nextUser: AuthUser) {
     window.localStorage.setItem(AUTH_USER_KEY, JSON.stringify(nextUser));
@@ -116,6 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function openAuthModal(mode: AuthMode = 'login') {
+    setAuthModalKey((currentKey) => currentKey + 1);
     setAuthMode(mode);
     setIsModalOpen(true);
   }
@@ -155,7 +192,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const registeredUser = getRegisteredUser();
     const matchingUser =
-      normalizedEmail === guestUser.email ? guestUser : registeredUser;
+      normalizedEmail === GUEST_EMAIL ? guestUser : registeredUser;
 
     if (!matchingUser || matchingUser.email !== normalizedEmail) {
       return 'User not found.';
@@ -171,6 +208,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function logout() {
+    if (isGuest) {
+      clearLibraryForUser(GUEST_EMAIL);
+      clearSubscription(GUEST_EMAIL);
+      clearGuestProgressData();
+    }
+
     window.localStorage.removeItem(AUTH_USER_KEY);
     notifyAuthChange();
   }
@@ -178,6 +221,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = {
     user,
     isAuthenticated: Boolean(user),
+    isGuest,
     openAuthModal,
     closeAuthModal,
     login,
@@ -189,6 +233,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider value={value}>
       {children}
       <AuthModal
+        key={authModalKey}
         isOpen={isModalOpen}
         mode={authMode}
         onModeChange={setAuthMode}

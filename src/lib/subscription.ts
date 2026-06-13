@@ -69,6 +69,10 @@ export function getSubscription(
   return getStoredSubscription(email) ?? (isAuthenticated ? 'basic' : null);
 }
 
+export function hasPremiumAccess(plan: SubscriptionPlan | null) {
+  return plan === 'premium' || plan === 'premium-plus';
+}
+
 export function setSubscription(email: string | null | undefined, plan: SubscriptionPlan) {
   if (!canUseStorage()) {
     return;

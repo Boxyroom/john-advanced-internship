@@ -1,0 +1,116 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.header {
+  max-width: 680px;
+}
+
+.eyebrow {
+  color: #2a8c57;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.title {
+  color: #032b41;
+  font-size: 32px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.description {
+  color: #394547;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.section {
+  min-width: 0;
+}
+
+.sectionHeader {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  color: #032b41;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.bookGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+  gap: 28px 24px;
+}
+
+.emptyState,
+.loggedOutState,
+.loadingState {
+  max-width: 560px;
+  border: 1px solid #e1e7ea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #394547;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 24px;
+}
+
+.loggedOutState {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.emptyTitle {
+  color: #032b41;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.emptyDescription {
+  color: #394547;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.loginButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 4px;
+  background: #2bd97c;
+  color: #032b41;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 0 18px;
+}
+
+@media (max-width: 576px) {
+  .page {
+    gap: 26px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .bookGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 14px;
+  }
+}
