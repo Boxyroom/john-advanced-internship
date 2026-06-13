@@ -72,6 +72,20 @@
   padding: 14px 16px;
 }
 
+.currentPlanBanner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  border: 1px solid #bae9cf;
+  border-radius: 8px;
+  background: #ecfff4;
+  color: #0f6b3a;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 12px 14px;
+}
+
 .planGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -204,6 +218,23 @@
 
 .upgradeButtonFeatured:hover {
   background: #23c56f;
+}
+
+.upgradeButtonDisabled,
+.upgradeButtonDisabled:hover {
+  cursor: default;
+  background: #eef3f1;
+  color: #6b757b;
+  transform: none;
+}
+
+.planStatus {
+  color: #6b757b;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .faqSection {
