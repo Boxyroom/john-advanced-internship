@@ -1,0 +1,67 @@
+.skeleton {
+  overflow: hidden;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f8dfaf 0%, #edcf93 50%, #f8dfaf 100%);
+  background-size: 220% 100%;
+  animation: shimmer 1400ms ease-in-out infinite;
+}
+
+.selectedIntroStack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.introLine {
+  width: 100%;
+  height: 24px;
+}
+
+.introLineShort {
+  width: 72%;
+  height: 24px;
+}
+
+.selectedTitle {
+  width: min(100%, 210px);
+  height: 20px;
+}
+
+.selectedAuthor {
+  width: 132px;
+  height: 14px;
+}
+
+.selectedImage {
+  width: 116px;
+  height: 172px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 980px) {
+  .selectedImage {
+    width: 104px;
+    height: 154px;
+  }
+}
+
+@media (max-width: 760px) {
+  .selectedImage {
+    width: 96px;
+    height: 142px;
+  }
+
+  .introLine,
+  .introLineShort {
+    height: 20px;
+  }
+}

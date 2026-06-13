@@ -1,0 +1,32 @@
+.logo {
+  width: 136px;
+  height: 54px;
+  background-image: url('/assets/logo.png');
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #6b757b;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.searchIcon::after {
+  position: absolute;
+  right: -6px;
+  bottom: -5px;
+  width: 8px;
+  height: 2px;
+  border-radius: 2px;
+  background: #6b757b;
+  content: '';
+  transform: rotate(45deg);
+  transform-origin: left center;
+}

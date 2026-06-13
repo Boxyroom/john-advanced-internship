@@ -1,0 +1,105 @@
+.skeleton {
+  overflow: hidden;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #eef3f1 0%, #dce7e3 50%, #eef3f1 100%);
+  background-size: 220% 100%;
+  animation: shimmer 1400ms ease-in-out infinite;
+}
+
+.cover {
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 1;
+}
+
+.title {
+  width: min(100%, 420px);
+  height: 38px;
+  margin-bottom: 12px;
+}
+
+.author {
+  width: 168px;
+  height: 18px;
+  margin-bottom: 14px;
+}
+
+.subtitle {
+  width: min(100%, 520px);
+  height: 22px;
+  margin-bottom: 18px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.metaLine {
+  width: 108px;
+  height: 15px;
+}
+
+.action {
+  height: 46px;
+}
+
+.secondaryAction {
+  grid-column: 1 / -1;
+  height: 46px;
+}
+
+.summaryTitle {
+  width: 190px;
+  height: 24px;
+  margin-bottom: 14px;
+}
+
+.summaryLines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summaryLine {
+  width: 100%;
+  height: 15px;
+}
+
+.summaryLineShort {
+  width: 72%;
+  height: 15px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .cover {
+    width: 286px;
+    max-width: 286px;
+  }
+
+  .title {
+    height: 34px;
+  }
+}
+
+@media (max-width: 430px) {
+  .cover {
+    width: 228px;
+    max-width: 228px;
+  }
+
+  .title {
+    height: 30px;
+  }
+}

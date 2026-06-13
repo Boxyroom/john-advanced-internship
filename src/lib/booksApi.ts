@@ -46,3 +46,9 @@ export function getRecommendedBooks() {
 export function getSuggestedBooks() {
   return fetchBookApi<Book[]>('/getBooks?status=suggested');
 }
+
+export function getBooksByAuthorOrTitle(search: string) {
+  return fetchBookApi<Book[]>(
+    `/getBooksByAuthorOrTitle?search=${encodeURIComponent(search)}`,
+  );
+}
