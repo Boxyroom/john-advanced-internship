@@ -114,11 +114,11 @@ export default function Home() {
               </div>
               <figure className={styles.landingImageMask}>
                 <Image
-                  src="/assets/landing.png"
+                  src="/assets/landing-hero.png"
                   alt="landing"
-                  width={400}
-                  height={400}
-                  sizes="(max-width: 768px) 0px, 400px"
+                  width={768}
+                  height={512}
+                  sizes="(max-width: 768px) 0px, 768px"
                   priority
                 />
               </figure>
