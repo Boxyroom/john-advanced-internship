@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import AppLayout from '@/components/AppLayout';
 import BookCard, { type BookCardData } from '@/components/BookCard';
+import BookCardSkeleton from '@/components/BookCardSkeleton';
 import { useAuth } from '@/components/AuthContext';
 import { getBook, type Book } from '@/lib/booksApi';
 import { getFinishedBookIds, getSavedBookIds } from '@/lib/library';
@@ -19,6 +20,9 @@ async function getBooksByIds(bookIds: string[]) {
 
   return books.filter((book): book is Book => Boolean(book?.id));
 }
+
+const savedBookSkeletons = [1, 2, 3, 4];
+const finishedBookSkeletons = [1, 2, 3, 4];
 
 type LibrarySectionProps = {
   books: BookCardData[];
@@ -42,6 +46,25 @@ function LibrarySection({ books, emptyMessage, title }: LibrarySectionProps) {
       ) : (
         <div className={styles.emptyState}>{emptyMessage}</div>
       )}
+    </section>
+  );
+}
+
+function LibrarySectionSkeleton({ title }: { title: string }) {
+  const skeletons =
+    title === 'Saved Books' ? savedBookSkeletons : finishedBookSkeletons;
+
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>{title}</h2>
+      </div>
+
+      <div className={styles.bookGrid}>
+        {skeletons.map((item) => (
+          <BookCardSkeleton key={item} />
+        ))}
+      </div>
     </section>
   );
 }
@@ -112,17 +135,25 @@ export default function LibraryPage() {
           </section>
         ) : (
           <>
-            {isLoading ? <div className={styles.loadingState}>Loading library...</div> : null}
-            <LibrarySection
-              books={savedBooks}
-              emptyMessage="You have not saved any books yet."
-              title="Saved Books"
-            />
-            <LibrarySection
-              books={finishedBooks}
-              emptyMessage="Finished books will appear here after you reach the end of a player."
-              title="Finished Books"
-            />
+            {isLoading ? (
+              <>
+                <LibrarySectionSkeleton title="Saved Books" />
+                <LibrarySectionSkeleton title="Finished Books" />
+              </>
+            ) : (
+              <>
+                <LibrarySection
+                  books={savedBooks}
+                  emptyMessage="You have not saved any books yet."
+                  title="Saved Books"
+                />
+                <LibrarySection
+                  books={finishedBooks}
+                  emptyMessage="Finished books will appear here after you reach the end of a player."
+                  title="Finished Books"
+                />
+              </>
+            )}
           </>
         )}
       </div>

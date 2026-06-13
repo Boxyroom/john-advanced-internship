@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { FiCheck, FiChevronDown } from 'react-icons/fi';
 import { FaCrown } from 'react-icons/fa';
 import AppLayout from '@/components/AppLayout';
 import { useAuth } from '@/components/AuthContext';
 import {
-  setSubscription,
+  getSubscription,
+  getSubscriptionLabel,
   type SubscriptionPlan,
 } from '@/lib/subscription';
 import styles from './ChoosePlan.module.css';
@@ -84,11 +84,14 @@ const faqs = [
 ];
 
 export default function ChoosePlanPage() {
-  const router = useRouter();
   const { isAuthenticated, isGuest, openAuthModal, user } = useAuth();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('yearly');
+  const [checkoutError, setCheckoutError] = useState('');
+  const [checkoutPlan, setCheckoutPlan] = useState<SubscriptionPlan | null>(null);
+  const subscription = getSubscription(user?.email, isAuthenticated);
+  const subscriptionLabel = getSubscriptionLabel(subscription);
 
-  function handleUpgrade(plan: SubscriptionPlan) {
+  async function handleUpgrade(plan: SubscriptionPlan) {
     if (!isAuthenticated) {
       openAuthModal('login');
       return;
@@ -99,8 +102,48 @@ export default function ChoosePlanPage() {
       return;
     }
 
-    setSubscription(user?.email, plan);
-    router.push('/settings');
+    if (
+      subscription === plan ||
+      (subscription === 'premium-plus' && plan === 'premium')
+    ) {
+      return;
+    }
+
+    setCheckoutError('');
+    setCheckoutPlan(plan);
+
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          plan,
+          billingCycle,
+          email: user?.email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to start checkout. Please try again.');
+      }
+
+      const data = await response.json() as { url?: string };
+
+      if (!data.url) {
+        throw new Error('Checkout URL was not returned. Please try again.');
+      }
+
+      window.location.assign(data.url);
+    } catch (error) {
+      setCheckoutError(
+        error instanceof Error
+          ? error.message
+          : 'Unable to start checkout. Please try again.',
+      );
+      setCheckoutPlan(null);
+    }
   }
 
   return (
@@ -146,12 +189,36 @@ export default function ChoosePlanPage() {
           </div>
         ) : null}
 
+        {checkoutError ? (
+          <div className={styles.trialBanner} role="alert">
+            {checkoutError}
+          </div>
+        ) : null}
+
+        {subscription && subscription !== 'basic' ? (
+          <div className={styles.currentPlanBanner}>
+            <FaCrown size={14} />
+            Your current plan: {subscriptionLabel}
+          </div>
+        ) : null}
+
         <section className={styles.planGrid} aria-label="Subscription plans">
           {plans.map((plan) => {
             const price =
               billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice;
             const caption =
               billingCycle === 'monthly' ? plan.monthlyCaption : plan.yearlyCaption;
+            const isCurrentPlan = subscription === plan.id;
+            const isIncludedInPremiumPlus =
+              subscription === 'premium-plus' && plan.id === 'premium';
+            const isPlanUnavailable = isCurrentPlan || isIncludedInPremiumPlus;
+            const buttonText = checkoutPlan === plan.id
+              ? 'Redirecting...'
+              : isCurrentPlan
+                ? 'Current plan'
+                : isIncludedInPremiumPlus
+                  ? 'Included in Premium Plus'
+                  : `Upgrade to ${plan.name}`;
 
             return (
               <article
@@ -190,12 +257,20 @@ export default function ChoosePlanPage() {
                 <button
                   className={`${styles.upgradeButton} ${
                     plan.highlighted ? styles.upgradeButtonFeatured : ''
-                  }`}
+                  } ${isPlanUnavailable ? styles.upgradeButtonDisabled : ''}`}
                   type="button"
+                  disabled={checkoutPlan === plan.id || isPlanUnavailable}
                   onClick={() => handleUpgrade(plan.id)}
                 >
-                  Upgrade to {plan.name}
+                  {buttonText}
                 </button>
+                {isPlanUnavailable ? (
+                  <p className={styles.planStatus}>
+                    {isCurrentPlan
+                      ? `You already have ${plan.name}.`
+                      : 'Premium is included with your Premium Plus plan.'}
+                  </p>
+                ) : null}
               </article>
             );
           })}

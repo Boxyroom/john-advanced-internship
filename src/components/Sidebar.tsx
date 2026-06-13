@@ -164,6 +164,7 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
 
                 return {
                   ...link,
+                  href: subscription === 'premium-plus' ? '/settings' : link.href,
                   label: subscription && subscription !== 'basic'
                     ? getSubscriptionLabel(subscription)
                     : link.label,
