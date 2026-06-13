@@ -53,19 +53,21 @@
 }
 
 .landingContent {
-  width: 100%;
+  width: 40%;
+  flex-shrink: 0;
 }
 
 .landingImageMask {
-  width: 100%;
+  width: 60%;
   display: flex;
   justify-content: flex-end;
+  transform: translateX(70px);
 }
 
 .landingImageMask img {
   width: 100%;
-  height: 100%;
-  max-width: 400px;
+  height: auto;
+  max-width: none;
 }
 
 .landingContentTitle {
